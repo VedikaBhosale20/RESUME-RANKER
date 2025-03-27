@@ -1,0 +1,15 @@
+# Node.js and React files
+frontend/node_modules
+frontend/build
+
+# Python virtual environment files
+backend/venv
+
+# Python cache
+*.pyc
+__pycache__
+
+# Environment variables or secrets
+.env
+
+

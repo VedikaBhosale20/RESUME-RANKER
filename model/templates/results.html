@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking Results</title>
+</head>
+<body>
+    <h1>Top Ranked Resumes</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Resume Score (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in result %}
+            <tr>
+                <td>{{ entry["Name"] }}</td>
+                <td>{{ entry["resume_score(%)"] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/rank">Go back to the form</a>
+</body>
+</html>
