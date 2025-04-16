@@ -2,13 +2,13 @@ import nltk
 import pandas as pd
 import re
 import os
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request, jsonify
+
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -65,7 +65,7 @@ def rank_resumes(job_description, df):
     top_resumes = df.sort_values(by="resume_score(%)", ascending=False).head(5)
     return top_resumes
 
-# Route to display the form and ranking results
+# API route to rank resumes based on job description (JSON request)
 @app.route('/rank', methods=['GET', 'POST'])
 def rank():
     csv_file_path = os.path.join(os.getcwd(), "datasets", "ResumeDataSetFinal.csv")
@@ -75,17 +75,12 @@ def rank():
         return render_template('error.html', error_message="Resume dataset not found!")
 
     if request.method == 'POST':
-        # Get job description from form input
-        job_description = request.form.get('job_description', '')
-
-        # Rank resumes based on job description
+        job_description = request.get_json().get('job_description', '')
         top_resumes = rank_resumes(job_description, df)
         result = top_resumes[["Name", "resume_score(%)"]].to_dict(orient='records')
+        return jsonify(result)
 
-        # Render results.html with top resume rankings
-        return render_template('results.html', result=result)
-
-    return render_template('form.html')  # Render input form initially
+    return render_template('form.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
